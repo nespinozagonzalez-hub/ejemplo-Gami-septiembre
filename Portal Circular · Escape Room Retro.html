@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portal Circular · Escape Room Retro</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<style>
+:root{color-scheme:dark;--ink:#091b29;--panel:#102b39;--line:#406879;--lime:#b9f36a;--coral:#ff826d;--paper:#eaf2e8;--cyan:#6fd3e6;--yel:#ffd84a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{background:#050d1a}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(#050d1a,#12163a 60%,#2a1550);color:var(--paper);font-family:'Space Mono',ui-monospace,monospace;font-size:15px;min-height:100vh;overflow-x:hidden}
+.px{font-family:'Press Start 2P','Space Mono',monospace}
+h1,h2,h3{font-family:'Press Start 2P','Space Mono',monospace;margin:0}
+h1{font-size:clamp(1.5rem,6.5vw,3rem);color:var(--lime);line-height:1.2;animation:glitch 4s infinite steps(1)}
+h2{font-size:clamp(.85rem,3vw,1.2rem);line-height:1.5;color:var(--yel)}
+h3{font-size:.9rem;color:var(--cyan)}
+.tag{font-family:'Press Start 2P',monospace;font-size:.62rem;color:var(--coral);letter-spacing:.08em}
+.q{line-height:1.7}
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.stars,.stars::after{position:absolute;inset:0;background-image:radial-gradient(1.5px 1.5px at 20px 30px,#fff,transparent),radial-gradient(1px 1px at 90px 120px,var(--lime),transparent),radial-gradient(1.5px 1.5px at 160px 60px,var(--coral),transparent);background-size:200px 160px;animation:drift 50s linear infinite}
+.stars::after{content:"";background-size:310px 250px;opacity:.6;animation-duration:25s}
+@keyframes drift{to{background-position:0 400px}}
+.sun{position:absolute;left:50%;bottom:20vh;width:min(50vw,320px);aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:linear-gradient(#ffd84a,#ff826d 55%,#c04ad0);opacity:.4;-webkit-mask:repeating-linear-gradient(#000 0 16px,transparent 16px 21px);mask:repeating-linear-gradient(#000 0 16px,transparent 16px 21px);animation:pulse 4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.25}}
+.horizon{position:absolute;left:0;right:0;bottom:0;height:20vh;background:#0a0720}
+.floor{position:absolute;left:-60%;right:-60%;bottom:0;height:42vh;background:repeating-linear-gradient(90deg,#ff826d66 0 2px,transparent 2px 64px),repeating-linear-gradient(0deg,#6fd3e666 0 2px,transparent 2px 44px);transform:perspective(320px) rotateX(62deg);transform-origin:center bottom;animation:grid 1.6s linear infinite;-webkit-mask-image:linear-gradient(transparent,#000 70%);mask-image:linear-gradient(transparent,#000 70%)}
+@keyframes grid{to{background-position:0 44px}}
+.fl{position:absolute;opacity:.5;animation:fly linear infinite}
+@keyframes fly{from{transform:translateY(110vh) rotate(0)}to{transform:translateY(-20vh) rotate(360deg)}}
+.crt{position:fixed;inset:0;z-index:60;pointer-events:none;background:repeating-linear-gradient(0deg,#0000 0 2px,#00000038 2px 3px),radial-gradient(ellipse at center,transparent 58%,#000b 100%);animation:flick 6s infinite}
+.crt::after{content:"";position:absolute;left:0;right:0;height:90px;background:linear-gradient(#0000,#b9f36a12,#0000);animation:scan 7s linear infinite}
+@keyframes flick{0%,100%{opacity:1}50%{opacity:.93}52%{opacity:.85}}
+@keyframes scan{from{top:-100px}to{top:100%}}
+.wrap{position:relative;z-index:2}
+.panel{background:var(--panel);box-shadow:0 -4px 0 0 var(--line),0 4px 0 0 var(--line),-4px 0 0 0 var(--line),4px 0 0 0 var(--line),10px 10px 0 4px #04101a;position:relative}
+.btn{font-family:'Press Start 2P',monospace;font-size:.7rem;color:var(--ink);background:var(--lime);padding:.95rem 1.2rem;cursor:pointer;border:0;box-shadow:0 -3px 0 0 #2d5a1c,0 3px 0 0 #2d5a1c,-3px 0 0 0 #2d5a1c,3px 0 0 0 #2d5a1c,6px 6px 0 3px #04101a;transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translate(3px,3px);box-shadow:0 -3px 0 0 #2d5a1c,0 3px 0 0 #2d5a1c,-3px 0 0 0 #2d5a1c,3px 0 0 0 #2d5a1c,3px 3px 0 3px #04101a}
+.btn:active{transform:translate(6px,6px);box-shadow:0 -3px 0 0 #2d5a1c,0 3px 0 0 #2d5a1c,-3px 0 0 0 #2d5a1c,3px 3px 0 0 #2d5a1c}
+.btn.alt{background:var(--coral);box-shadow:0 -3px 0 0 #7a2b1d,0 3px 0 0 #7a2b1d,-3px 0 0 0 #7a2b1d,3px 0 0 0 #7a2b1d,6px 6px 0 3px #04101a}
+.coin{animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:.25}}
+:focus-visible{outline:3px dashed var(--yel);outline-offset:5px}
+.inp{background:#071923;color:var(--lime);border:0;box-shadow:0 0 0 3px #66899a;padding:.8rem 1rem;font-family:'Space Mono',monospace;font-weight:700;caret-color:var(--yel)}
+.inp::placeholder{color:#a5bdbb}
+.choice{border-left:4px solid var(--coral);background:#193747;padding:.75rem .9rem;transition:transform .15s,background .15s}
+.choice:hover{transform:translateX(6px);background:#22485a}
+.choice b{font-family:'Press Start 2P',monospace;font-size:.75rem;color:var(--yel);margin-right:.4rem}
+.av{background:#193747;border:0;color:var(--paper);padding:1rem 1.1rem;cursor:pointer;box-shadow:0 0 0 3px var(--line);transition:transform .15s}
+.av:hover{transform:translateY(-4px)}
+.av[aria-pressed="true"]{background:#294b42;box-shadow:0 0 0 3px var(--lime),0 0 18px #b9f36a88}
+.av[aria-pressed="true"] svg{animation:bob .6s steps(2) infinite}
+.av span{font-family:'Press Start 2P',monospace;font-size:.55rem;display:block;margin-top:.6rem}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.slot{font-family:'Press Start 2P',monospace;text-align:center;padding:1.1rem 0;font-size:1.1rem;background:#0b2230;color:#66899a;box-shadow:inset 0 0 0 3px #1c4152}
+.slot.on{color:var(--lime);background:#1b3d2f;box-shadow:inset 0 0 0 3px var(--lime),0 0 16px #b9f36a77;animation:pop .5s}
+@keyframes pop{0%{transform:scale(.4) rotate(-12deg)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+.mission{animation:appear .4s steps(6) both}
+@keyframes appear{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.floaty{animation:bob 1.2s steps(2) infinite}
+.flo{animation:hover 3s ease-in-out infinite}
+@keyframes hover{50%{transform:translateY(-10px)}}
+@keyframes glitch{0%,92%,100%{text-shadow:3px 3px 0 #ff826d66,-3px -3px 0 #6fd3e666;transform:none}93%{text-shadow:-6px 0 0 #ff826d,6px 0 0 #6fd3e6;transform:skewX(8deg)}95%{text-shadow:5px 0 0 #6fd3e6,-5px 0 0 #ff826d;transform:translateX(5px)}97%{transform:skewX(-6deg)}}
+.cur{animation:blink .9s steps(1) infinite}
+.shake{animation:shake .4s}
+@keyframes shake{20%{transform:translate(-8px,0)}40%{transform:translate(8px,-3px)}60%{transform:translate(-6px,2px)}80%{transform:translate(5px,0)}}
+.banner{position:fixed;inset:0;z-index:55;display:none;place-items:center;pointer-events:none;background:#050d1acc}
+.banner.show{display:grid;animation:fade 1.3s forwards}
+.banner p{font-family:'Press Start 2P',monospace;font-size:clamp(1rem,5vw,2rem);color:var(--yel);text-shadow:4px 4px 0 var(--coral);text-align:center;line-height:1.6;animation:zoom 1.3s steps(8)}
+@keyframes fade{0%,70%{opacity:1}100%{opacity:0}}
+@keyframes zoom{from{transform:scale(3);opacity:0}to{transform:none;opacity:1}}
+.bit{position:fixed;z-index:58;width:8px;height:8px;pointer-events:none;animation:burst .9s steps(9) forwards}
+@keyframes burst{to{transform:translate(var(--x),var(--y)) rotate(180deg);opacity:0}}
+.conf{position:fixed;top:-12px;z-index:58;width:10px;height:10px;pointer-events:none;animation:rain linear forwards}
+@keyframes rain{to{transform:translateY(105vh) rotate(540deg)}}
+.vanish{animation:vanish 2s steps(10) forwards}
+@keyframes vanish{to{transform:scale(0) rotate(720deg);opacity:0}}
+.hero{opacity:0;animation:appear .6s 1.8s forwards}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"><div class="stars"></div><div class="sun"></div><div class="horizon"></div><div class="floor"></div><div id="fl"></div></div>
+<div class="crt" aria-hidden="true"></div>
+<div id="banner" class="banner" aria-hidden="true"><p id="banner-t"></p></div>
+
+<div class="wrap w-full max-w-5xl mx-auto px-4 sm:px-8 py-7 sm:py-12">
+ <header class="flex flex-wrap items-start justify-between gap-5 mb-10">
+  <div>
+   <p class="tag mb-4">◈ ARCADE / MISIÓN 2088 &nbsp;·&nbsp; HI-SCORE 99999</p>
+   <h1>PORTAL CIRCULAR<span class="cur">_</span></h1>
+   <p class="mt-4 uppercase text-sm" style="color:var(--cyan)">● SISTEMA EN LÍNEA · INSERTA TU IDENTIDAD</p>
+  </div>
+  <button id="sound-toggle" type="button" class="btn alt shrink-0" aria-pressed="false"><span id="s-off">♪ ACTIVAR SONIDO</span><span id="s-on" class="hidden">♪ SILENCIAR</span></button>
+ </header>
+
+ <main>
+  <section id="intro" class="panel p-5 sm:p-8 mb-8 mission" aria-labelledby="story-heading">
+   <div class="flex items-start justify-between gap-4 mb-4">
+    <div><p class="tag mb-3">TRANSMISIÓN INTERDIMENSIONAL // ARCHIVO RECUPERADO</p><h2 id="story-heading">La invasión de Desperdicius</h2></div>
+    <div class="flo hidden sm:block" data-sp="monster" data-s="6"></div>
+   </div>
+   <div class="space-y-4 leading-relaxed mb-8">
+    <p>Año 2088. En el sótano de una vieja escuela, una máquina recreativa llevaba décadas apagada. Esta noche volvió a encenderse sola. Su pantalla mostró un contador, cinco candados y una advertencia: «Cuando el último recurso se agote, el portal permanecerá abierto».</p>
+    <p>Del otro lado apareció Desperdicius, señor del usar y tirar. Su ejército convierte objetos útiles en basura y alimenta el portal con cada cosa que se desperdicia. Los pasillos de la escuela ya se están transformando en niveles de su juego.</p>
+    <p>Pero el sistema conserva una defensa secreta: la Clave Circular. Para reconstruirla tendrás que reducir, reutilizar, reparar, reciclar y diseñar para durar. Crea tu personaje, supera cinco niveles y recupera los dígitos antes de enfrentarte al jefe final. La partida empieza contigo.</p>
+   </div>
+   <form id="character-form" class="border-t-4 border-dashed pt-6" style="border-color:var(--line)">
+    <h3 class="mb-5">01 / CREA TU PERSONAJE</h3>
+    <label for="player-name" class="block font-bold mb-2">NOMBRE DE JUGADOR/A</label>
+    <input id="player-name" class="inp w-full max-w-sm mb-6" type="text" maxlength="20" autocomplete="nickname" required placeholder="Tu alias arcade">
+    <fieldset class="mb-7"><legend class="font-bold mb-3">ELIGE TU AVATAR</legend>
+     <div class="flex flex-wrap gap-4">
+      <button type="button" class="av" data-avatar="robot" aria-pressed="true" aria-label="Avatar robot"><i data-sp="robot" data-s="5" class="block" style="display:block"></i><span>ROBOT</span></button>
+      <button type="button" class="av" data-avatar="astro" aria-pressed="false" aria-label="Avatar explorador"><i data-sp="astro" data-s="5" style="display:block"></i><span>EXPLORADOR</span></button>
+      <button type="button" class="av" data-avatar="fox" aria-pressed="false" aria-label="Avatar zorro"><i data-sp="fox" data-s="5" style="display:block"></i><span>ZORRO</span></button>
+     </div>
+    </fieldset>
+    <button type="submit" class="btn"><span class="coin">▶</span> INSERT COIN · INICIAR PARTIDA</button>
+   </form>
+  </section>
+
+  <div id="game" class="hidden">
+   <section class="panel px-5 py-4 mb-8 flex flex-wrap items-center justify-between gap-3" aria-label="Personaje activo">
+    <p class="font-bold flex items-center gap-3"><span id="player-avatar" aria-hidden="true"></span><span id="player-display"></span></p>
+    <p class="tag" style="color:var(--lime)">◈ PARTIDA EN CURSO / 1UP</p>
+   </section>
+   <section aria-labelledby="progress-heading" class="mb-6">
+    <div class="flex flex-wrap items-end justify-between gap-3 mb-4"><h2 id="progress-heading">CLAVES RECUPERADAS</h2><span id="progress-count" class="px" style="color:var(--lime)" aria-live="polite">0 / 5</span></div>
+    <div id="digit-track" class="grid grid-cols-5 gap-3 sm:gap-5" aria-label="Cinco dígitos por recuperar"></div>
+   </section>
+   <p id="feedback" role="status" aria-live="polite" class="min-h-12 mb-4 font-bold"></p>
+   <div id="missions"></div>
+
+   <section id="final-lock" class="mission panel p-5 sm:p-8 mb-8 hidden" aria-labelledby="final-heading">
+    <div class="flex items-start justify-between gap-4">
+     <div><p class="tag mb-3">JEFE FINAL / PORTAL INESTABLE</p><h2 id="final-heading" class="mb-4">Expulsa a Desperdicius</h2></div>
+     <div class="flo" data-sp="monster" data-s="6"></div>
+    </div>
+    <p class="leading-relaxed mb-6">Introduce los cinco dígitos recuperados en el orden de las misiones. La clave circular cerrará el portal.</p>
+    <form id="final-form" class="flex flex-wrap items-end gap-4">
+     <div><label for="final-code" class="block mb-2 font-bold">CLAVE MAESTRA</label><input id="final-code" class="inp w-48 tracking-widest" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" autocomplete="off" required></div>
+     <button class="btn" type="submit">CERRAR PORTAL ↗</button>
+    </form>
+   </section>
+
+   <section id="victory" class="mission panel p-6 sm:p-10 text-center hidden" aria-labelledby="victory-heading">
+    <p class="tag mb-4" style="color:var(--yel)">✦ MISIÓN COMPLETADA ✦</p>
+    <div class="relative mx-auto mb-5" style="width:120px;height:120px"><div id="v-monster" class="absolute inset-0 grid place-items-center"></div><div id="v-star" class="hero absolute inset-0 grid place-items-center floaty"></div></div>
+    <h2 id="victory-heading" class="mb-5" style="font-size:clamp(1.1rem,4.5vw,2rem)">¡Portal cerrado!</h2>
+    <p id="victory-player" class="font-bold mb-4 flex justify-center items-center gap-3"></p>
+    <p class="leading-relaxed max-w-2xl mx-auto mb-7">Desperdicius ha vuelto a su dimensión. Reducir, reutilizar, reparar, reciclar y diseñar para durar mantiene los materiales en circulación y disminuye los residuos. ¡Nuestro futuro tiene otra oportunidad!</p>
+    <button id="restart" class="btn" type="button">VOLVER A JUGAR ↺</button>
+   </section>
+  </div>
+ </main>
+ <footer class="pt-10 pb-3"><p class="tag" style="color:var(--cyan)">↳ SISTEMA CIRCULAR // CADA RECURSO CUENTA</p></footer>
+</div>
+
+<script>
+/* ---------- Sprites pixel-art ---------- */
+const PAL={k:'#071923',w:'#eaf2e8',b:'#6fd3e6',r:'#ff826d',y:'#ffd84a',g:'#9fb3b8',o:'#ff9a3c',l:'#b9f36a',p:'#a23fc4',d:'#406879',c:'#a8f0ff'};
+const SP={
+ robot:["....r....","....k....",".bbbbbbb.",".bwkbwkb.",".bbbbbbb.",".bkkkkkb.",".bbbbbbb.","..b...b..",".bb...bb."],
+ astro:["..wwwww..",".wwwwwww.",".wkkkkkw.",".wkccckw.",".wkkkkkw.",".wwwwwww.","..rwwwr..","..w...w..",".ww...ww."],
+ fox:["o.......o","oo.....oo","ooooooooo","oowkoowko","owooooowo","owwwkwwwo",".owwwwwo.","..ooooo.."],
+ monster:["k.........k","kr.......rk",".kpppppppk.",".ppppppppp.",".pwwpppwwp.",".pwkpppwkp.",".ppppppppp.",".pwkwkwkwp.",".ppwkwkwpp.","..ppppppp.."],
+ can:["gggggg","gddddg","gdwwdg","gddddg","gdwwdg","gddddg","gggggg"],
+ bottle:["..l..","..l..",".lll.","lllll","lwwll","lwwll","lllll","lllll"],
+ star:["...y...","...y...","yyyyyyy",".yyyyy.","..yyy..",".yy.yy.",".y...y."],
+ shirt:[".rr.k.rr.","rrrrkrrrr","rrrrrrrrr",".rrrrrrr.",".rrrrrrr.",".rrrrrrr."],
+ bulb:[".yyyyy.","yywwyyy","yyyyyyy","yyyyyyy",".yyyyy.","..yyy..","..ggg..","..ggg..","...g..."],
+ phones:["..kkkkk..",".k.....k.","k.......k","bb.....bb","bb.....bb","bb.....bb",".b.....b."]
+};
+function sp(n,s){const m=SP[n],h=m.length,w=m[0].length;let r='';
+ m.forEach((row,y)=>[...row].forEach((c,x)=>{if(c!=='.')r+=`<rect x="${x}" y="${y}" width="1" height="1" fill="${PAL[c]}"/>`}));
+ return `<svg viewBox="0 0 ${w} ${h}" width="${w*s}" height="${h*s}" shape-rendering="crispEdges" aria-hidden="true" style="display:block">${r}</svg>`}
+function paint(root=document){root.querySelectorAll('[data-sp]').forEach(e=>{e.innerHTML=sp(e.dataset.sp,+e.dataset.s||4)})}
+
+/* ---------- Fondo flotante ---------- */
+(()=>{const f=document.getElementById('fl'),k=['can','bottle','star','shirt','bulb','phones'];
+ for(let i=0;i<9;i++){const d=document.createElement('div');d.className='fl';
+  d.style.left=(Math.random()*95)+'%';d.style.animationDuration=(22+Math.random()*28)+'s';d.style.animationDelay=(-Math.random()*40)+'s';
+  d.innerHTML=sp(k[i%k.length],3);f.appendChild(d)}})();
+
+/* ---------- Datos del juego ---------- */
+const answers=['7','3','8','2','5'];
+const hints=['Pista: reducir significa evitar crear el residuo desde el inicio.','Pista: reutilizar permite dar otro uso a algo que ya existe.','Pista: reparar evita sustituir un objeto que todavía puede funcionar.','Pista: reciclar recupera el material mediante una recogida adecuada.','Pista: un producto circular debe poder mantenerse y repararse.'];
+const M=[
+ {tag:'NIVEL 01 / REDUCIR',t:'La máquina de envases',ic:'bottle',q:'La cafetería entrega un vaso desechable cada día. ¿Qué decisión evita más residuos desde el principio? El dígito de esa opción abre el candado.',o:['2 · Tirar los vasos al contenedor general.','7 · Llevar una botella o vaso reutilizable.','4 · Comprar vasos desechables más grandes.']},
+ {tag:'NIVEL 02 / REUTILIZAR',t:'El armario del duplicador',ic:'shirt',q:'Tu clase necesita disfraces para una función. ¿Cómo aprovecháis prendas que ya existen?',o:['6 · Comprar disfraces nuevos para una sola noche.','3 · Intercambiar y adaptar ropa usada.','9 · Tirar la ropa antigua para hacer espacio.']},
+ {tag:'NIVEL 03 / REPARAR',t:'El taller de circuitos',ic:'bulb',q:'Una lámpara deja de encenderse. Antes de reemplazarla, ¿qué acción prolonga su vida útil?',o:['8 · Revisar la bombilla y reparar el cable con ayuda experta.','1 · Comprar otra lámpara sin comprobar la avería.','5 · Guardarla rota indefinidamente.']},
+ {tag:'NIVEL 04 / RECICLAR',t:'La estación de materiales',ic:'can',q:'Una lata de bebida está vacía. Si ya no puede reutilizarse, ¿qué haces para recuperar su material?',o:['0 · Mezclarla con restos de comida.','2 · Depositarla en la recogida de envases correspondiente.','6 · Abandonarla en el patio.']},
+ {tag:'NIVEL 05 / DISEÑAR PARA DURAR',t:'El plano del futuro',ic:'phones',q:'Diseñas unos auriculares nuevos. ¿Qué característica facilita que sigan en uso durante más tiempo?',o:['7 · Piezas pegadas que no pueden sustituirse.','1 · Batería imposible de cambiar.','5 · Piezas reemplazables y disponibles para reparación.']}
+];
+document.getElementById('missions').innerHTML=M.map((m,i)=>`
+<section id="mission-${i+1}" class="mission panel p-5 sm:p-8 mb-8 ${i?'hidden':''}" aria-labelledby="mt-${i+1}">
+ <div class="flex items-start justify-between gap-4 mb-4"><div><p class="tag mb-3">${m.tag}</p><h2 id="mt-${i+1}">${m.t}</h2></div><div class="floaty">${sp(m.ic,5)}</div></div>
+ <p class="q mb-5">${m.q}</p>
+ <ul class="space-y-3 mb-6">${m.o.map(x=>`<li class="choice"><b>${x[0]}</b>${x.slice(1)}</li>`).join('')}</ul>
+ <form class="lock-form flex flex-wrap items-end gap-4" data-index="${i}">
+  <div><label for="code-${i+1}" class="block mb-2 font-bold">CLAVE DEL CANDADO</label><input id="code-${i+1}" class="inp w-36" type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" autocomplete="off" required></div>
+  <button class="btn" type="submit">ABRIR ↗</button>
+ </form></section>`).join('');
+const track=document.getElementById('digit-track');
+track.innerHTML=[1,2,3,4,5].map(n=>`<div class="slot" aria-label="Clave ${n} bloqueada">?</div>`).join('');
+paint();
+
+/* ---------- Audio chiptune ---------- */
+let unlocked=0,avatar='robot',soundEnabled=false,ac;
+const feedback=document.getElementById('feedback'),slots=[...track.children];
+function tone(f,d,delay=0){if(!soundEnabled)return;try{ac||=new(window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume();
+ const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime+delay;o.type='square';o.frequency.value=f;
+ g.gain.setValueAtTime(.045,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+d)}catch(_){}}
+const jingle=n=>n.forEach((f,i)=>tone(f,.14,i*.09));
+
+/* ---------- Efectos ---------- */
+function burst(el,cols=['#b9f36a','#ffd84a','#ff826d','#6fd3e6']){const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+ for(let i=0;i<22;i++){const b=document.createElement('i'),a=Math.random()*6.283,d=50+Math.random()*90;
+  b.className='bit';b.style.cssText=`left:${cx}px;top:${cy}px;background:${cols[i%cols.length]};--x:${Math.cos(a)*d}px;--y:${Math.sin(a)*d}px`;
+  document.body.appendChild(b);setTimeout(()=>b.remove(),950)}}
+function confetti(){const cols=['#b9f36a','#ffd84a','#ff826d','#6fd3e6','#a23fc4'];
+ for(let i=0;i<70;i++){const c=document.createElement('i');c.className='conf';
+  c.style.cssText=`left:${Math.random()*100}vw;background:${cols[i%5]};animation-duration:${2+Math.random()*2.5}s;animation-delay:${Math.random()*1.2}s`;
+  document.body.appendChild(c);setTimeout(()=>c.remove(),6000)}}
+function banner(t){const b=document.getElementById('banner');document.getElementById('banner-t').innerHTML=t;
+ b.classList.remove('show');void b.offsetWidth;b.classList.add('show')}
+function shake(el){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake')}
+
+/* ---------- Interacciones ---------- */
+document.getElementById('sound-toggle').addEventListener('click',e=>{soundEnabled=!soundEnabled;
+ e.currentTarget.setAttribute('aria-pressed',String(soundEnabled));
+ document.getElementById('s-off').classList.toggle('hidden',soundEnabled);
+ document.getElementById('s-on').classList.toggle('hidden',!soundEnabled);
+ if(soundEnabled)tone(660,.12)});
+
+document.querySelectorAll('.av').forEach(b=>b.addEventListener('click',()=>{avatar=b.dataset.avatar;
+ document.querySelectorAll('.av').forEach(c=>c.setAttribute('aria-pressed',String(c===b)));tone(520,.08)}));
+
+document.getElementById('character-form').addEventListener('submit',e=>{e.preventDefault();
+ const name=document.getElementById('player-name').value.trim();
+ if(!name){document.getElementById('player-name').focus();return}
+ document.getElementById('player-avatar').innerHTML=sp(avatar,3);
+ document.getElementById('player-display').textContent=name;
+ const v=document.getElementById('victory-player');v.innerHTML=sp(avatar,4);
+ const s=document.createElement('span');s.textContent=name+' · HÉROE/A CIRCULAR';v.appendChild(s);
+ document.getElementById('intro').classList.add('hidden');document.getElementById('game').classList.remove('hidden');
+ banner('PLAYER 1<br>READY!');jingle([523,659,784,1047]);document.getElementById('code-1').focus()});
+
+document.querySelectorAll('.lock-form').forEach(form=>form.addEventListener('submit',e=>{e.preventDefault();
+ const i=Number(form.dataset.index);if(i!==unlocked)return;
+ const input=form.querySelector('input');
+ if(input.value.trim()!==answers[i]){feedback.textContent=hints[i];feedback.style.color='#ffb19e';
+  tone(180,.17);tone(130,.2,.12);shake(document.getElementById('mission-'+(i+1)));input.select();return}
+ slots[i].textContent=answers[i];slots[i].classList.add('on');slots[i].setAttribute('aria-label',`Clave ${i+1}: ${answers[i]}`);
+ burst(slots[i]);unlocked++;
+ document.getElementById('progress-count').textContent=`${unlocked} / 5`;
+ document.getElementById('mission-'+(i+1)).classList.add('hidden');
+ const next=unlocked<5?document.getElementById('mission-'+(unlocked+1)):document.getElementById('final-lock');
+ next.classList.remove('hidden');
+ feedback.textContent=unlocked<5?'¡Candado abierto! Avanza al siguiente nivel.':'¡Cinco claves recuperadas! Introduce la clave maestra.';
+ feedback.style.color='#b9f36a';
+ banner(unlocked<5?`NIVEL 0${unlocked+1}`:'JEFE FINAL<br>¡CUIDADO!');
+ jingle([659,784,988]);next.querySelector('input').focus()}));
+
+document.getElementById('final-form').addEventListener('submit',e=>{e.preventDefault();
+ const input=document.getElementById('final-code');
+ if(input.value.trim()!==answers.join('')){feedback.textContent='El portal sigue abierto. Revisa los cinco dígitos y su orden.';
+  feedback.style.color='#ffb19e';tone(180,.2);shake(document.getElementById('final-lock'));input.select();return}
+ document.getElementById('final-lock').classList.add('hidden');
+ document.getElementById('victory').classList.remove('hidden');
+ document.getElementById('v-monster').innerHTML=`<div class="vanish">${sp('monster',9)}</div>`;
+ document.getElementById('v-star').innerHTML=sp('star',12);
+ feedback.textContent='';confetti();banner('YOU WIN!');
+ jingle([523,659,784,1047,784,1047,1319]);document.getElementById('restart').focus()});
+
+document.getElementById('restart').addEventListener('click',()=>{unlocked=0;
+ document.querySelectorAll('form').forEach(f=>f.reset());avatar='robot';
+ document.querySelectorAll('.av').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===0)));
+ slots.forEach((s,i)=>{s.textContent='?';s.classList.remove('on');s.setAttribute('aria-label',`Clave ${i+1} bloqueada`)});
+ document.getElementById('progress-count').textContent='0 / 5';
+ document.querySelectorAll('#missions section').forEach((s,i)=>s.classList.toggle('hidden',i!==0));
+ ['final-lock','victory','game'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+ document.getElementById('intro').classList.remove('hidden');feedback.textContent='';
+ document.getElementById('player-name').focus()});
+</script>
+</body>
+</html>
